@@ -52,7 +52,7 @@
                         <tr class="matrix-header-row">
                             <th rowspan="2" class="align-middle matrix-co-header" style="min-width: 150px;">Course Outcome</th>
                             <th colspan="12" class="matrix-po-group-header">Program Outcomes (PO)</th>
-                            <th colspan="4" class="matrix-po-group-header" style="background-color: #f1f8e9;">Program Specific Outcomes (PSO)</th>
+                            <th colspan="2" class="matrix-po-group-header" style="background-color: #f1f8e9;">Program Specific Outcomes (PSO)</th>
                             <th rowspan="2" class="align-middle" style="width: 100px;">Tools</th>
                         </tr>
                         <tr class="matrix-header-row">
@@ -60,74 +60,17 @@
                                 <th class="matrix-po-header" title="PO<?php echo $i; ?>">PO<?php echo $i; ?></th>
                             <?php
 endfor; ?>
-                            <?php for ($i = 1; $i <= 4; $i++): ?>
+                            <?php for ($i = 1; $i <= 2; $i++): ?>
                                 <th class="matrix-po-header" style="background-color: #f1f8e9;" title="PSO<?php echo $i; ?>">PSO<?php echo $i; ?></th>
                             <?php
 endfor; ?>
                         </tr>
                     </thead>
-                    <tbody>
-                        <?php
-$cos = ['CO1: Understand AI basics', 'CO2: Apply algorithms', 'CO3: Analyze Performance'];
-foreach ($cos as $index => $co):
-    $coCode = "CO" . ($index + 1);
-?>
-                            <tr>
-                                <td class="text-start ps-3 fw-bold bg-light" style="font-size: 0.85rem;">
-                                    <?php echo $co; ?>
-                                </td>
-                                <?php
-    $outcomes = array_merge(
-        array_map(function ($i) {
-        return "PO$i";
-    }, range(1, 12)),
-        array_map(function ($i) {
-        return "PSO$i";
-    }, range(1, 4))
-    );
-    foreach ($outcomes as $colName):
-?>
-                                    <td class="matrix-cell level-0" style="transition: background-color 0.3s ease;">
-                                        <span class="justification-indicator d-none" id="just-<?php echo $coCode . $colName; ?>"><i class="fas fa-comment"></i></span>
-                                        <select class="form-select form-select-sm matrix-select border-0 bg-transparent shadow-none fw-bold mx-auto" 
-                                                style="cursor: pointer;" 
-                                                data-co="<?php echo $coCode; ?>"
-                                                data-po="<?php echo $colName; ?>"
-                                                onchange="updateHeatmap(this)">
-                                            <option value="0">0</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                        </select>
-                                        <div class="mt-1">
-                                            <span class="justification-btn text-muted" data-bs-toggle="modal"
-                                                data-bs-target="#justificationModal"
-                                                onclick="openJustificationModal('<?php echo $coCode; ?>', '<?php echo $colName; ?>')"
-                                                style="cursor: pointer;">
-                                                <i class="fas fa-pencil-alt"></i> Justify
-                                            </span>
-                                        </div>
-                                    </td>
-                                <?php
-    endforeach; ?>
-                                <td>
-                                    <button class="btn btn-sm btn-link copy-row-btn" title="Copy mapping to next row">
-                                        <i class="fas fa-copy me-1"></i> Copy
-                                    </button>
-                                </td>
-                            </tr>
-                        <?php
-endforeach; ?>
+                    <tbody id="matrix-tbody">
+                        <!-- Dynamically populated by script.js -->
                     </tbody>
-                    <tfoot>
-                        <tr class="matrix-avg-row bg-light">
-                            <td class="text-start ps-3 fw-bold">Average</td>
-                            <?php foreach ($outcomes as $colName): ?>
-                                <td class="avg-cell fw-bold" id="avg-<?php echo $colName; ?>">–</td>
-                            <?php
-endforeach; ?>
-                            <td></td>
-                        </tr>
+                    <tfoot id="matrix-tfoot">
+                        <!-- Dynamically populated by script.js -->
                     </tfoot>
                 </table>
             </div>

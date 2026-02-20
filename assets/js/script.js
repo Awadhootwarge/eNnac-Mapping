@@ -50,20 +50,165 @@ document.addEventListener('DOMContentLoaded', function () {
         'PO8': { title: 'Ethics', short: 'Ethics' },
         'PO9': { title: 'Individual and Team Work', short: 'Teamwork' },
         'PO10': { title: 'Communication', short: 'Communication' },
+        'PO11': { title: 'Project Management and Finance', short: 'Proj. Mgmt.' },
         'PO12': { title: 'Life-long Learning', short: 'Lifelong Learn.' },
         'PSO1': { title: 'Program Specific Outcome 1', short: 'PSO 1' },
-        'PSO2': { title: 'Program Specific Outcome 2', short: 'PSO 2' },
-        'PSO3': { title: 'Program Specific Outcome 3', short: 'PSO 3' },
-        'PSO4': { title: 'Program Specific Outcome 4', short: 'PSO 4' }
+        'PSO2': { title: 'Program Specific Outcome 2', short: 'PSO 2' }
     };
 
-    const courseOutcomes = {
-        'CO1': 'Understand fundamental concepts of machine learning, supervised and unsupervised learning paradigms.',
-        'CO2': 'Apply various machine learning algorithms for classification, regression, and clustering problems.',
-        'CO3': 'Analyze the performance of ML models using appropriate metrics and validation techniques.',
-        'CO4': 'Design and implement neural network architectures for real-world applications.',
-        'CO5': 'Evaluate ethical implications and societal impact of ML-based systems.'
+    let courseOutcomes = JSON.parse(localStorage.getItem('courseOutcomes'));
+    if (!courseOutcomes) {
+        courseOutcomes = {
+            'CO1': 'Understand fundamental concepts of machine learning, supervised and unsupervised learning paradigms.',
+            'CO2': 'Apply various machine learning algorithms for classification, regression, and clustering problems.',
+            'CO3': 'Analyze the performance of ML models using appropriate metrics and validation techniques.'
+        };
+        localStorage.setItem('courseOutcomes', JSON.stringify(courseOutcomes));
+    }
+
+    function renderMappingMatrix() {
+        const tbody = document.getElementById('matrix-tbody');
+        const tfoot = document.getElementById('matrix-tfoot');
+        if (!tbody || !tfoot) return;
+
+        const poKeys = Object.keys(programOutcomes);
+        let tbodyHtml = '';
+
+        Object.keys(courseOutcomes).forEach(coCode => {
+            const coDesc = courseOutcomes[coCode];
+            tbodyHtml += `<tr>
+                <td class="text-start ps-3 fw-bold bg-light" style="font-size: 0.85rem;">
+                    ${coCode}: ${escapeHtml(coDesc)}
+                </td>`;
+
+            poKeys.forEach(colName => {
+                // Initialize default map 0 if not set
+                tbodyHtml += `<td class="matrix-cell level-0" style="transition: background-color 0.3s ease;">
+                    <span class="justification-indicator d-none" id="just-${coCode}${colName}"><i class="fas fa-comment"></i></span>
+                    <select class="form-select form-select-sm matrix-select border-0 bg-transparent shadow-none fw-bold mx-auto" 
+                            style="cursor: pointer;" 
+                            data-co="${coCode}" data-po="${colName}" onchange="updateHeatmap(this)">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                    <div class="mt-1">
+                        <span class="justification-btn text-muted" data-bs-toggle="modal"
+                            data-bs-target="#justificationModal"
+                            onclick="openJustificationModal('${coCode}', '${colName}')"
+                            style="cursor: pointer;">
+                            <i class="fas fa-pencil-alt"></i> Justify
+                        </span>
+                    </div>
+                </td>`;
+            });
+
+            tbodyHtml += `<td>
+                <button class="btn btn-sm btn-link copy-row-btn" title="Copy mapping to next row">
+                    <i class="fas fa-copy me-1"></i> Copy
+                </button>
+            </td></tr>`;
+        });
+
+        tbody.innerHTML = tbodyHtml;
+
+        let tfootHtml = `<tr class="matrix-avg-row bg-light">
+            <td class="text-start ps-3 fw-bold">Average</td>`;
+        poKeys.forEach(colName => {
+            tfootHtml += `<td class="avg-cell fw-bold" id="avg-${colName}">–</td>`;
+        });
+        tfootHtml += `<td></td></tr>`;
+        tfoot.innerHTML = tfootHtml;
+
+        // Restore saved mappings if any
+        const savedMapping = JSON.parse(localStorage.getItem('coPoMapping') || '{}');
+        document.querySelectorAll('.matrix-select').forEach(select => {
+            const key = `${select.dataset.co}-${select.dataset.po}`;
+            if (savedMapping[key]) {
+                select.value = savedMapping[key];
+            }
+        });
+    }
+
+    function renderSyllabusCOs() {
+        const tbody = document.getElementById('coTableBody');
+        if (!tbody) return;
+
+        // Sort keys logically based on CO number
+        const keys = Object.keys(courseOutcomes).sort((a, b) => {
+            const numA = parseInt(a.replace(/\D/g, '')) || 0;
+            const numB = parseInt(b.replace(/\D/g, '')) || 0;
+            return numA - numB;
+        });
+
+        let html = '';
+        keys.forEach(key => {
+            html += `<tr>
+                <td class="fw-bold">${key}</td>
+                <td>${escapeHtml(courseOutcomes[key])}</td>
+                <td>
+                    <button class="btn btn-sm btn-link text-danger p-0 ms-2" onclick="deleteCO('${key}')"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>`;
+        });
+        tbody.innerHTML = html;
+    }
+
+    // Attach function to window so onclick works from HTML
+    window.deleteCO = function (code) {
+        if (confirm("Are you sure you want to delete " + code + "?")) {
+            delete courseOutcomes[code];
+            localStorage.setItem('courseOutcomes', JSON.stringify(courseOutcomes));
+            renderSyllabusCOs();
+
+            // Clean up mappings related to this CO
+            const mappingData = JSON.parse(localStorage.getItem('coPoMapping') || '{}');
+            let modified = false;
+            Object.keys(mappingData).forEach(k => {
+                if (k.startsWith(code + '-')) {
+                    delete mappingData[k];
+                    modified = true;
+                }
+            });
+            if (modified) {
+                localStorage.setItem('coPoMapping', JSON.stringify(mappingData));
+            }
+        }
     };
+
+    // Call renderMappingMatrix on DOMContentLoaded
+    renderMappingMatrix();
+    // Call renderSyllabusCOs on DOMContentLoaded
+    renderSyllabusCOs();
+
+    // CO Form Handler
+    const saveCoBtn = document.getElementById('saveCoBtn');
+    if (saveCoBtn) {
+        saveCoBtn.addEventListener('click', () => {
+            const codeInput = document.getElementById('newCoCode');
+            const descInput = document.getElementById('newCoDesc');
+            const code = codeInput.value.trim().toUpperCase();
+            const desc = descInput.value.trim();
+
+            if (!code || !desc) {
+                alert('Please fill out both code and description.');
+                return;
+            }
+
+            courseOutcomes[code] = desc;
+            localStorage.setItem('courseOutcomes', JSON.stringify(courseOutcomes));
+
+            codeInput.value = '';
+            descInput.value = '';
+
+            renderSyllabusCOs();
+
+            const modalEl = document.getElementById('addCOModal');
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            if (modal) modal.hide();
+        });
+    }
 
     // ========================================
     // DASHBOARD: SELECTION LOGIC
@@ -267,7 +412,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <td style="border: 1px solid black; padding: 12px; vertical-align: middle; background-color: white;">
                         <textarea class="form-control strict-po-note-input"
                                   data-co="${coCode}" data-po="${poCode}"
-                                  rows="2" style="width: 100%; border: 1px solid #999; border-radius: 4px; padding: 8px; font-size: 0.9em; resize: vertical;">${escapeHtml(note)}</textarea>
+                                  rows="2" style="width: 100%; border: 1px solid #999; border-radius: 4px; padding: 8px; font-size: 0.9em; resize: vertical;" placeholder="Add justification for mapping ${coCode} with ${poCode}">${escapeHtml(note)}</textarea>
                     </td>`;
 
                 html += `</tr>`;

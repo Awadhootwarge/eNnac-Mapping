@@ -91,27 +91,8 @@
                                     <th style="width: 100px;">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="fw-bold">CO1</td>
-                                    <td>Understand the fundamental concepts of machine learning and its paradigms.</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-link text-primary p-0"><i
-                                                class="fas fa-edit"></i></button>
-                                        <button class="btn btn-sm btn-link text-danger p-0 ms-2"><i
-                                                class="fas fa-trash"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-bold">CO2</td>
-                                    <td>Develop skills to implement linear and polynomial regression techniques.</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-link text-primary p-0"><i
-                                                class="fas fa-edit"></i></button>
-                                        <button class="btn btn-sm btn-link text-danger p-0 ms-2"><i
-                                                class="fas fa-trash"></i></button>
-                                    </td>
-                                </tr>
+                            <tbody id="coTableBody">
+                                <!-- Rendered dynamically by script.js -->
                             </tbody>
                         </table>
                     </div>
@@ -130,24 +111,24 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Define New CO</h5>
+                <h5 class="modal-title" id="addCoModalTitle">Define New CO</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form>
                     <div class="mb-3">
                         <label class="form-label">CO Code</label>
-                        <input type="text" class="form-control" placeholder="e.g. CO4">
+                        <input type="text" class="form-control" id="newCoCode" placeholder="e.g. CO4">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">CO Description</label>
-                        <textarea class="form-control" rows="3" placeholder="Describe the course outcome..."></textarea>
+                        <textarea class="form-control" id="newCoDesc" rows="3" placeholder="Describe the course outcome..."></textarea>
                     </div>
                 </form>
             </div>
             <div class="modal-footer border-top-0 pt-0 pb-3 px-3">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save CO</button>
+                <button type="button" class="btn btn-primary" id="saveCoBtn">Save CO</button>
             </div>
         </div>
     </div>
