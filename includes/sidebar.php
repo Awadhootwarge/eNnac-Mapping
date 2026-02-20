@@ -30,6 +30,11 @@
             </a>
         </li>
         <li>
+            <a href="../mapping/details.php">
+                <i class="fas fa-clipboard-list"></i> <span>Mapping Details</span>
+            </a>
+        </li>
+        <li>
             <a href="../attainment/index.php">
                 <i class="fas fa-calculator"></i> <span>Attainment</span>
             </a>
