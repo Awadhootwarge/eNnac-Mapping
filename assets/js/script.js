@@ -148,7 +148,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 <td class="fw-bold">${key}</td>
                 <td>${escapeHtml(courseOutcomes[key])}</td>
                 <td>
-                    <button class="btn btn-sm btn-link text-danger p-0 ms-2" onclick="deleteCO('${key}')"><i class="fas fa-trash"></i></button>
+                    <button class="btn btn-sm btn-link text-primary p-0 me-2" onclick="editCO('${key}')"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-sm btn-link text-danger p-0" onclick="deleteCO('${key}')"><i class="fas fa-trash"></i></button>
                 </td>
             </tr>`;
         });
@@ -177,10 +178,48 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
+    window.editCO = function (code) {
+        // Open modal in edit mode
+        const codeInput = document.getElementById('newCoCode');
+        const descInput = document.getElementById('newCoDesc');
+        const modalTitle = document.getElementById('addCoModalTitle');
+        const saveBtn = document.getElementById('saveCoBtn');
+
+        codeInput.value = code;
+        descInput.value = courseOutcomes[code];
+
+        if (modalTitle) modalTitle.innerText = "Edit Course Outcome";
+        if (saveBtn) saveBtn.innerText = "Update CO";
+
+        const modalEl = document.getElementById('addCOModal');
+        const modal = new bootstrap.Modal(modalEl);
+        modal.show();
+    };
+
     // Call renderMappingMatrix on DOMContentLoaded
     renderMappingMatrix();
     // Call renderSyllabusCOs on DOMContentLoaded
     renderSyllabusCOs();
+
+    // Setup Add New CO button to reset modal state initially
+    const addCoModalBtn = document.querySelector('[data-bs-target="#addCOModal"]');
+    if (addCoModalBtn) {
+        addCoModalBtn.addEventListener('click', () => {
+            const codeInput = document.getElementById('newCoCode');
+            const descInput = document.getElementById('newCoDesc');
+            const modalTitle = document.getElementById('addCoModalTitle');
+            const saveBtn = document.getElementById('saveCoBtn');
+
+            // Suggest the next available CO Code based on current count
+            const nextIdx = Object.keys(courseOutcomes).length + 1;
+            codeInput.value = `CO${nextIdx}`;
+
+            descInput.value = '';
+
+            if (modalTitle) modalTitle.innerText = "Define New CO";
+            if (saveBtn) saveBtn.innerText = "Save CO";
+        });
+    }
 
     // CO Form Handler
     const saveCoBtn = document.getElementById('saveCoBtn');

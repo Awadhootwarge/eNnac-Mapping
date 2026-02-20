@@ -24,8 +24,8 @@
                     <li><a class="dropdown-item py-2" href="#"><i class="fas fa-file-excel me-2 text-success"></i>Export for NAAC</a></li>
                 </ul>
             </div>
-            <button id="saveMappingBtnTop" class="btn btn-primary px-4 py-2 shadow-sm fw-medium d-flex align-items-center" style="border-radius: 8px; transition: all 0.2s; background-color: var(--academic-blue); border-color: var(--academic-blue);">
-                <i class="fas fa-save me-2"></i> Save Mapping
+            <button id="saveMappingBtn" class="btn btn-primary px-4 py-2 shadow-sm fw-medium d-flex align-items-center" style="border-radius: 8px; transition: all 0.2s; background-color: var(--academic-blue); border-color: var(--academic-blue);">
+                <i class="fas fa-save me-2"></i> Save Mapping & Continue
             </button>
         </div>
     </div>
@@ -196,44 +196,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // -------------------------------------------------------------------------
-    // 2. Save Mapping Button Logic
-    // -------------------------------------------------------------------------
-    const saveBtn = document.getElementById('saveMappingBtn');
-    if (saveBtn) {
-        saveBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const originalContent = this.innerHTML;
-            
-            // Show Spinner
-            this.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Saving...';
-            this.disabled = true;
-            this.style.opacity = '0.8';
-            
-            setTimeout(() => {
-                // Success State Styling
-                this.innerHTML = '<i class="fas fa-check me-2"></i> Saved Successfully';
-                this.classList.replace('btn-primary', 'btn-success');
-                this.style.backgroundColor = '#198754';
-                this.style.borderColor = '#198754';
-                
-                // Show Success Toast
-                const toastEl = document.getElementById('successToast');
-                const toast = new bootstrap.Toast(toastEl, { delay: 4000 });
-                toast.show();
-                
-                // Return button to normal after 3 seconds
-                setTimeout(() => {
-                    this.innerHTML = originalContent;
-                    this.classList.replace('btn-success', 'btn-primary');
-                    this.style.backgroundColor = 'var(--academic-blue)';
-                    this.style.borderColor = 'var(--academic-blue)';
-                    this.disabled = false;
-                    this.style.opacity = '1';
-                }, 3000);
-            }, 1000); // 1s simulation delay
-        });
-    }
+    // Inline save logic removed because it is fully handled natively by script.js function saveMappingData()
 });
 </script>
 
