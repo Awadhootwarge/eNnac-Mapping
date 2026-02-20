@@ -7,8 +7,8 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <div class="d-flex align-items-center mb-1">
-                <a href="../subject/index.php" class="btn btn-outline-secondary btn-sm me-3 px-3 py-2 fw-medium ghost-btn text-decoration-none" style="border-color: #ddd; color: #555; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: all 0.2s;">
-                    <i class="fas fa-arrow-left me-2"></i> Back to Subjects
+                <a href="../syllabus/index.php" class="btn btn-outline-secondary btn-sm me-3 px-3 py-2 fw-medium ghost-btn text-decoration-none" style="border-color: #ddd; color: #555; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: all 0.2s;">
+                    <i class="fas fa-arrow-left me-2"></i> Back to Syllabus & CO
                 </a>
                 <h2 class="fw-bold mb-0">CO–PO Mapping Matrix</h2>
             </div>
