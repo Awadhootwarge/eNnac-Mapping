@@ -1,0 +1,278 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --academic-blue: #1a237e;
+    --academic-light: #e8eaf6;
+    --sidebar-width: 260px;
+    --sidebar-collapsed-width: 70px;
+    --bg-light: #f4f7fe;
+    --card-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-light);
+    color: #333;
+    overflow-x: hidden;
+}
+
+/* Sidebar Styles */
+#sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    background: var(--academic-blue);
+    color: white;
+    transition: all 0.3s;
+}
+
+#sidebar.collapsed {
+    width: var(--sidebar-collapsed-width);
+}
+
+#sidebar .sidebar-header {
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+#sidebar ul.components {
+    padding: 20px 0;
+}
+
+#sidebar ul li a {
+    padding: 12px 25px;
+    font-size: 0.95rem;
+    display: block;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+#sidebar ul li a:hover,
+#sidebar ul li.active>a {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+#sidebar ul li a i {
+    margin-right: 15px;
+    width: 20px;
+    text-align: center;
+}
+
+#sidebar.collapsed ul li a span {
+    display: none;
+}
+
+/* Page Content */
+#content {
+    width: calc(100% - var(--sidebar-width));
+    padding: 20px;
+    min-height: 100vh;
+    transition: all 0.3s;
+    margin-left: var(--sidebar-width);
+    margin-top: 60px;
+}
+
+#content.expanded {
+    width: calc(100% - var(--sidebar-collapsed-width));
+    margin-left: var(--sidebar-collapsed-width);
+}
+
+/* Navbar */
+.navbar {
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    z-index: 999;
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 24px;
+}
+
+.card-header {
+    background-color: transparent;
+    border-bottom: 1px solid #f0f0f0;
+    font-weight: 600;
+    padding: 1rem 1.25rem;
+}
+
+/* Workflow Tracker */
+.workflow-tracker {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.workflow-tracker::before {
+    content: '';
+    position: absolute;
+    top: 25px;
+    left: 5%;
+    right: 5%;
+    height: 2px;
+    background: #e0e0e0;
+    z-index: 0;
+}
+
+.step {
+    z-index: 1;
+    text-align: center;
+    width: 100px;
+}
+
+.step-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    transition: 0.3s;
+    font-weight: bold;
+}
+
+.step.completed .step-icon {
+    background: var(--academic-blue);
+    border-color: var(--academic-blue);
+    color: #fff;
+}
+
+.step.active .step-icon {
+    border-color: var(--academic-blue);
+    color: var(--academic-blue);
+}
+
+.step-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #666;
+}
+
+/* Forms & Tables */
+.form-label {
+    font-weight: 500;
+    color: #555;
+}
+
+.btn-primary {
+    background-color: var(--academic-blue);
+    border-color: var(--academic-blue);
+}
+
+.btn-primary:hover {
+    background-color: #121858;
+}
+
+.table thead th {
+    background-color: #f8f9fa;
+    color: #555;
+    font-weight: 600;
+    border-bottom: 1px solid #eee;
+}
+
+/* Custom for CO-PO Matrix Heatmap */
+.matrix-select {
+    width: 65px;
+    margin: 0 auto;
+    border: 1px solid transparent;
+    border-bottom: 2px solid #ddd;
+    background: transparent;
+    text-align: center;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.matrix-select:focus {
+    outline: none;
+    border-bottom-color: var(--academic-blue);
+    background: white;
+}
+
+.level-0 {
+    background-color: #ffffff !important;
+    color: #333;
+}
+
+.level-1 {
+    background-color: #e3f2fd !important;
+    color: #0d47a1;
+}
+
+.level-2 {
+    background-color: #90caf9 !important;
+    color: #0d47a1;
+}
+
+.level-3 {
+    background-color: #42a5f5 !important;
+    color: #fff;
+}
+
+.justification-btn {
+    font-size: 0.7rem;
+    padding: 2px 5px;
+    opacity: 0.3;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.matrix-cell:hover .justification-btn {
+    opacity: 1;
+}
+
+.copy-row-btn {
+    padding: 2px 8px;
+    font-size: 0.75rem;
+}
+
+/* Selection Funnel Styles */
+.selection-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    border: 2px solid transparent;
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.selection-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.selection-card.selected {
+    border-color: var(--academic-blue);
+    background-color: var(--academic-light);
+}
+
+.funnel-step-header {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888;
+    margin-bottom: 15px;
+}
+
+.matrix-cell {
+    position: relative;
+    padding: 1rem !important;
+}
+
+.justification-indicator {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-size: 0.6rem;
+    color: var(--academic-blue);
+}
