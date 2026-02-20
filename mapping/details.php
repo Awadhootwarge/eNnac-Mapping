@@ -103,12 +103,12 @@
     <!-- STRICT ACADEMIC CO-PO MAPPING TABLE                          -->
     <!-- ============================================================ -->
     <div style="background: white; padding: 20px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 30px;">
-        <h4 style="margin-bottom: 20px; text-align: center; font-weight: bold; text-decoration: underline;">CO-PO Justification Sheet</h4>
+        <h4 style="margin-bottom: 20px; text-align: center; font-weight: bold; text-decoration: underline;">CO-PO & PSO Justification Sheet</h4>
         <table id="strict-co-po-table" style="width: 100%; border-collapse: collapse; border: 2px solid black;">
             <thead>
                 <tr>
                     <th style="width: 30%; border: 1px solid black; padding: 12px; background-color: #f4f4f4; text-align: left;">Course Outcome</th>
-                    <th style="width: 20%; border: 1px solid black; padding: 12px; background-color: #f4f4f4; text-align: center;">Program Outcome</th>
+                    <th style="width: 20%; border: 1px solid black; padding: 12px; background-color: #f4f4f4; text-align: center;">Outcome (PO/PSO)</th>
                     <th style="width: 50%; border: 1px solid black; padding: 12px; background-color: #f4f4f4; text-align: left;">Justification</th>
                 </tr>
             </thead>

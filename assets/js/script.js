@@ -50,8 +50,11 @@ document.addEventListener('DOMContentLoaded', function () {
         'PO8': { title: 'Ethics', short: 'Ethics' },
         'PO9': { title: 'Individual and Team Work', short: 'Teamwork' },
         'PO10': { title: 'Communication', short: 'Communication' },
-        'PO11': { title: 'Project Management and Finance', short: 'Proj. Mgmt.' },
-        'PO12': { title: 'Life-long Learning', short: 'Lifelong Learn.' }
+        'PO12': { title: 'Life-long Learning', short: 'Lifelong Learn.' },
+        'PSO1': { title: 'Program Specific Outcome 1', short: 'PSO 1' },
+        'PSO2': { title: 'Program Specific Outcome 2', short: 'PSO 2' },
+        'PSO3': { title: 'Program Specific Outcome 3', short: 'PSO 3' },
+        'PSO4': { title: 'Program Specific Outcome 4', short: 'PSO 4' }
     };
 
     const courseOutcomes = {
@@ -182,17 +185,17 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updateAverages() {
-        for (let i = 1; i <= 12; i++) {
-            const poSelects = document.querySelectorAll(`[data-po="PO${i}"].matrix-select`);
-            if (poSelects.length === 0) continue;
+        Object.keys(programOutcomes).forEach(poCode => {
+            const poSelects = document.querySelectorAll(`[data-po="${poCode}"].matrix-select`);
+            if (poSelects.length === 0) return;
             let sum = 0, count = 0;
             poSelects.forEach(s => { const v = parseInt(s.value); if (v > 0) { sum += v; count++; } });
-            const avgCell = document.getElementById(`avg-PO${i}`);
+            const avgCell = document.getElementById(`avg-${poCode}`);
             if (avgCell) {
                 avgCell.textContent = count > 0 ? (sum / count).toFixed(1) : '–';
                 avgCell.style.opacity = count > 0 ? '1' : '0.4';
             }
-        }
+        });
     }
 
     function updateSaveButtonState() {
@@ -320,7 +323,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const savedMapping = JSON.parse(localStorage.getItem('coPoMapping') || '{}');
         let totalMapped = 0, totalSum = 0, totalNonZero = 0;
         const totalCOs = Object.keys(courseOutcomes).length;
-        const totalPossible = totalCOs * 12;
+        const poCount = Object.keys(programOutcomes).length;
+        const totalPossible = totalCOs * poCount;
 
         Object.values(savedMapping).forEach(v => {
             const num = parseInt(v);

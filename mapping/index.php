@@ -31,55 +31,39 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- PART 1: PROGRAM OUTCOMES (PO) SETUP SECTION                  -->
+    <!-- MAPPING MATRIX (ENHANCED - 16 OUTCOMES)                      -->
     <!-- ============================================================ -->
-    <div class="card section-card mb-4" id="po-setup-section">
+    <div class="card section-card mb-4" id="mapping-matrix-section">
         <div class="card-header bg-white d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
-                <div class="section-icon me-3">
-                    <i class="fas fa-bullseye"></i>
+                <div class="section-icon section-icon-matrix me-3">
+                    <i class="fas fa-th"></i>
                 </div>
                 <div>
-                    <h5 class="mb-0 fw-bold">Program Outcomes (PO) – As per AICTE Graduate Attributes</h5>
-                    <small class="text-muted">12 Standard Program Outcomes aligned with NBA/AICTE guidelines</small>
+                    <h5 class="mb-0 fw-bold">Program Outcomes & Specific Outcomes – NBA/AICTE Framework</h5>
+                    <small class="text-muted">12 Standard Program Outcomes (POs) and 4 Program Specific Outcomes (PSOs) (0 = No Mapping, 1 = Low, 2 = Medium, 3 = High)</small>
                 </div>
             </div>
-            <span class="badge bg-academic-badge">
-                <i class="fas fa-shield-alt me-1"></i> AICTE Compliant
-            </span>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0" id="po-table">
-                    <thead>
-                        <tr class="po-table-header">
-                            <th style="width: 100px;">PO Code</th>
-                            <th style="width: 260px;">PO Title (Short Name)</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><span class="po-code-badge">PO1</span></td>
-                            <td class="fw-semibold">Engineering Knowledge</td>
-                            <td class="po-desc">Apply the knowledge of mathematics, science, engineering fundamentals, and an engineering specialization to the solution of complex engineering problems.</td>
-                        </tr>
-                        <tr>
-                            <td><span class="po-code-badge">PO2</span></td>
-                            <td class="fw-semibold">Problem Analysis</td>
-                            <td class="po-desc">Identify, formulate, review research literature, and analyze complex engineering problems reaching substantiated conclusions using first principles of mathematics, natural sciences, and engineering sciences.</td>
-                        </tr>
-                        <tr>
-                            <th rowspan="2" class="align-middle" style="width: 150px;">Course Outcome</th>
-                            <th colspan="5">Program Outcomes (POs)</th>
+                <table class="table table-bordered text-center align-middle mb-0" id="co-po-matrix">
+                    <thead class="bg-light">
+                        <tr class="matrix-header-row">
+                            <th rowspan="2" class="align-middle matrix-co-header" style="min-width: 150px;">Course Outcome</th>
+                            <th colspan="12" class="matrix-po-group-header">Program Outcomes (PO)</th>
+                            <th colspan="4" class="matrix-po-group-header" style="background-color: #f1f8e9;">Program Specific Outcomes (PSO)</th>
                             <th rowspan="2" class="align-middle" style="width: 100px;">Tools</th>
                         </tr>
-                        <tr>
-                            <th title="Technical Knowledge">PO1</th>
-                            <th title="Problem Solving">PO2</th>
-                            <th title="Modern Tool Usage">PO3</th>
-                            <th title="Ethics">PO4</th>
-                            <th title="Communication">PO5</th>
+                        <tr class="matrix-header-row">
+                            <?php for ($i = 1; $i <= 12; $i++): ?>
+                                <th class="matrix-po-header" title="PO<?php echo $i; ?>">PO<?php echo $i; ?></th>
+                            <?php
+endfor; ?>
+                            <?php for ($i = 1; $i <= 4; $i++): ?>
+                                <th class="matrix-po-header" style="background-color: #f1f8e9;" title="PSO<?php echo $i; ?>">PSO<?php echo $i; ?></th>
+                            <?php
+endfor; ?>
                         </tr>
                     </thead>
                     <tbody>
@@ -92,11 +76,24 @@ foreach ($cos as $index => $co):
                                 <td class="text-start ps-3 fw-bold bg-light" style="font-size: 0.85rem;">
                                     <?php echo $co; ?>
                                 </td>
-                                <?php for ($i = 1; $i <= 5; $i++): ?>
-                                    <td class="matrix-cell">
-                                        <span class="justification-indicator d-none" id="just-<?php echo $coCode . $i; ?>"><i
-                                                class="fas fa-comment"></i></span>
-                                        <select class="form-select form-select-sm matrix-select">
+                                <?php
+    $outcomes = array_merge(
+        array_map(function ($i) {
+        return "PO$i";
+    }, range(1, 12)),
+        array_map(function ($i) {
+        return "PSO$i";
+    }, range(1, 4))
+    );
+    foreach ($outcomes as $colName):
+?>
+                                    <td class="matrix-cell level-0" style="transition: background-color 0.3s ease;">
+                                        <span class="justification-indicator d-none" id="just-<?php echo $coCode . $colName; ?>"><i class="fas fa-comment"></i></span>
+                                        <select class="form-select form-select-sm matrix-select border-0 bg-transparent shadow-none fw-bold mx-auto" 
+                                                style="cursor: pointer;" 
+                                                data-co="<?php echo $coCode; ?>"
+                                                data-po="<?php echo $colName; ?>"
+                                                onchange="updateHeatmap(this)">
                                             <option value="0">0</option>
                                             <option value="1">1</option>
                                             <option value="2">2</option>
@@ -105,13 +102,14 @@ foreach ($cos as $index => $co):
                                         <div class="mt-1">
                                             <span class="justification-btn text-muted" data-bs-toggle="modal"
                                                 data-bs-target="#justificationModal"
-                                                data-cell="<?php echo $coCode . '-' . $i; ?>">
+                                                onclick="openJustificationModal('<?php echo $coCode; ?>', '<?php echo $colName; ?>')"
+                                                style="cursor: pointer;">
                                                 <i class="fas fa-pencil-alt"></i> Justify
                                             </span>
                                         </div>
                                     </td>
                                 <?php
-    endfor; ?>
+    endforeach; ?>
                                 <td>
                                     <button class="btn btn-sm btn-link copy-row-btn" title="Copy mapping to next row">
                                         <i class="fas fa-copy me-1"></i> Copy
@@ -122,12 +120,13 @@ foreach ($cos as $index => $co):
 endforeach; ?>
                     </tbody>
                     <tfoot>
-                        <tr class="matrix-avg-row">
+                        <tr class="matrix-avg-row bg-light">
                             <td class="text-start ps-3 fw-bold">Average</td>
-                            <?php for ($i = 1; $i <= 12; $i++): ?>
-                            <td class="avg-cell" id="avg-PO<?php echo $i; ?>">–</td>
+                            <?php foreach ($outcomes as $colName): ?>
+                                <td class="avg-cell fw-bold" id="avg-<?php echo $colName; ?>">–</td>
                             <?php
-endfor; ?>
+endforeach; ?>
+                            <td></td>
                         </tr>
                     </tfoot>
                 </table>
@@ -136,10 +135,10 @@ endfor; ?>
         <div class="card-footer bg-white border-top">
             <div class="d-flex align-items-center">
                 <span class="me-3 fw-bold small">Heatmap Legend:</span>
-                <span class="badge level-3 me-2" style="border: 1px solid #ddd">3 (High)</span>
-                <span class="badge level-2 me-2" style="border: 1px solid #ddd">2 (Medium)</span>
-                <span class="badge level-1 me-2" style="border: 1px solid #ddd">1 (Low)</span>
-                <span class="badge level-0 me-2" style="border: 1px solid #ddd">0 (N/A)</span>
+                <span class="badge level-3 me-2" style="border: 1px solid #ddd; padding: 6px 12px; color: #fff;">3 (High)</span>
+                <span class="badge level-2 me-2" style="border: 1px solid #ddd; padding: 6px 12px; color: #fff;">2 (Medium)</span>
+                <span class="badge level-1 me-2" style="border: 1px solid #ddd; padding: 6px 12px; color: #fff;">1 (Low)</span>
+                <span class="badge level-0 me-2" style="border: 1px solid #ddd; padding: 6px 12px; color: #444;">0 (N/A)</span>
             </div>
         </div>
     </div>
