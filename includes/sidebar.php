@@ -9,16 +9,7 @@
                 <i class="fas fa-chart-line"></i> <span>Dashboard</span>
             </a>
         </li>
-        <li>
-            <a href="../cohort/index.php">
-                <i class="fas fa-users"></i> <span>Cohort Allocation</span>
-            </a>
-        </li>
-        <li>
-            <a href="../subject/index.php">
-                <i class="fas fa-book"></i> <span>Subject Mapping</span>
-            </a>
-        </li>
+
         <li>
             <a href="../syllabus/index.php">
                 <i class="fas fa-file-alt"></i> <span>Syllabus & CO</span>
