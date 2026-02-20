@@ -158,25 +158,55 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Attach function to window so onclick works from HTML
     window.deleteCO = function (code) {
-        if (confirm("Are you sure you want to delete " + code + "?")) {
-            delete courseOutcomes[code];
-            localStorage.setItem('courseOutcomes', JSON.stringify(courseOutcomes));
-            renderSyllabusCOs();
+        window.coToDelete = code;
+        const targetText = document.getElementById('deleteTargetCo');
+        if (targetText) targetText.innerText = code;
 
-            // Clean up mappings related to this CO
-            const mappingData = JSON.parse(localStorage.getItem('coPoMapping') || '{}');
-            let modified = false;
-            Object.keys(mappingData).forEach(k => {
-                if (k.startsWith(code + '-')) {
-                    delete mappingData[k];
-                    modified = true;
-                }
-            });
-            if (modified) {
-                localStorage.setItem('coPoMapping', JSON.stringify(mappingData));
+        const modalEl = document.getElementById('deleteCoConfirmModal');
+        if (modalEl) {
+            const modal = new bootstrap.Modal(modalEl);
+            modal.show();
+        } else {
+            // Fallback just in case
+            if (confirm("Are you sure you want to delete " + code + "?")) {
+                performDeleteCO(code);
             }
         }
     };
+
+    function performDeleteCO(code) {
+        delete courseOutcomes[code];
+        localStorage.setItem('courseOutcomes', JSON.stringify(courseOutcomes));
+        renderSyllabusCOs();
+
+        // Clean up mappings related to this CO
+        const mappingData = JSON.parse(localStorage.getItem('coPoMapping') || '{}');
+        let modified = false;
+        Object.keys(mappingData).forEach(k => {
+            if (k.startsWith(code + '-')) {
+                delete mappingData[k];
+                modified = true;
+            }
+        });
+        if (modified) {
+            localStorage.setItem('coPoMapping', JSON.stringify(mappingData));
+        }
+    }
+
+    // Attach event listener once to the Confirm Delete Button dynamically handling any code
+    document.addEventListener('click', function (e) {
+        if (e.target && e.target.id === 'confirmDeleteCoBtn') {
+            if (window.coToDelete) {
+                performDeleteCO(window.coToDelete);
+                window.coToDelete = null; // Clear state
+                const modalEl = document.getElementById('deleteCoConfirmModal');
+                if (modalEl) {
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    if (modal) modal.hide();
+                }
+            }
+        }
+    });
 
     window.editCO = function (code) {
         // Open modal in edit mode

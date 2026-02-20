@@ -134,6 +134,26 @@
     </div>
 </div>
 
+<!-- Delete Confirm Modal -->
+<div class="modal fade" id="deleteCoConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white border-0 py-2">
+                <h6 class="modal-title mb-0"><i class="fas fa-exclamation-triangle me-2"></i> Confirm Delete</h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <p class="mb-0">Are you sure you want to delete <strong id="deleteTargetCo"></strong>?</p>
+                <small class="text-danger mt-2 d-block">All related mappings will also be removed.</small>
+            </div>
+            <div class="modal-footer border-0 p-2 d-flex justify-content-center bg-light">
+                <button type="button" class="btn btn-sm btn-secondary px-3" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-sm btn-danger px-3" id="confirmDeleteCoBtn">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- View Syllabus Modal -->
 <div class="modal fade" id="viewSyllabusModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
