@@ -103,12 +103,30 @@ document.addEventListener('DOMContentLoaded', function () {
             col.innerHTML = `
                 <div class="card selection-card h-100" data-step="2">
                     <div class="card-body d-flex justify-content-between align-items-center">
-                        <div><h6 class="mb-1">${sub.name}</h6><small class="text-muted">${sub.code}</small></div>
-                        <a href="../syllabus/index.php?subject=${sub.code}&name=${encodeURIComponent(sub.name)}" class="btn btn-sm btn-primary">Map <i class="fas fa-arrow-right ms-1"></i></a>
+                        <div>
+                            <h6 class="mb-1">${sub.name}</h6>
+                            <small class="text-muted">${sub.code}</small>
+                        </div>
+                        <a href="../syllabus/index.php?subject=${sub.code}&name=${encodeURIComponent(sub.name)}" class="btn btn-sm btn-primary" style="background-color: var(--academic-blue); border-color: var(--academic-blue);">
+                            Map <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
                     </div>
                 </div>`;
             subjectContainer.appendChild(col);
         });
+
+        // Add the "Add Subject" Card
+        const addCardCol = document.createElement('div');
+        addCardCol.className = 'col-md-4';
+        addCardCol.innerHTML = `
+            <div id="add-subject-card" class="card selection-card h-100" style="border: 2px dashed #ccc; background-color: #f8f9fa; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#addSubjectModal">
+                <div class="card-body d-flex justify-content-center align-items-center flex-column text-muted" style="min-height: 80px;">
+                    <i class="fas fa-plus-circle fa-2x mb-2 text-primary"></i>
+                    <h6 class="mb-0 fw-bold">Add Subject</h6>
+                </div>
+            </div>
+        `;
+        subjectContainer.appendChild(addCardCol);
     }
 
     // ========================================
@@ -353,10 +371,32 @@ document.addEventListener('DOMContentLoaded', function () {
         else { pTab.classList.add('active'); uTab.classList.remove('active'); pArea.classList.remove('d-none'); uArea.classList.add('d-none'); }
     }
 
+    // Dynamic Title for Syllabus and Mapping Pages
     const subTitle = document.getElementById('dynamicSubjectTitle');
-    if (subTitle) {
-        const params = new URLSearchParams(window.location.search);
-        const n = params.get('name'), c = params.get('subject');
-        if (n && c) subTitle.innerText = `${n} (${c})`;
+    const urlParams = new URLSearchParams(window.location.search);
+    const subName = urlParams.get('name');
+    const subCode = urlParams.get('subject');
+
+    if (subName && subCode) {
+        // Update Title
+        if (subTitle) {
+            subTitle.innerText = `${subName} (${subCode})`;
+        }
+
+        // Update "Next: CO-PO Mapping" button (has id="nextMappingBtn" on syllabus page)
+        const nextMappingBtn = document.getElementById('nextMappingBtn');
+        if (nextMappingBtn) {
+            nextMappingBtn.href = `../mapping/index.php?subject=${encodeURIComponent(subCode)}&name=${encodeURIComponent(subName)}`;
+        }
+
+        // Update "Back to Syllabus" link (on mapping page)
+        const backToSyllabusLink = document.querySelector('a[href*="syllabus/index.php"]');
+        if (backToSyllabusLink) {
+            backToSyllabusLink.href = `../syllabus/index.php?subject=${encodeURIComponent(subCode)}&name=${encodeURIComponent(subName)}`;
+        }
+    } else if (subTitle) {
+        // No subject in URL - show a friendly fallback
+        subTitle.innerText = 'No subject selected';
+        subTitle.style.color = '#999';
     }
 });
